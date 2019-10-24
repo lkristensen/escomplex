@@ -145,7 +145,7 @@ function processHalsteadMetric (node, syntax, metric, currentReport) {
       } else {
         identifier = s.identifier
       }
-      if (_isFunction(s.filter) === false || s.filter(node) === true) {
+      if ((_isFunction(s.filter) === false || s.filter(node) === true) && (identifier !== undefined)) {
         halsteadItemEncountered(currentReport, metric, identifier)
       }
     })

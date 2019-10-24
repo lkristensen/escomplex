@@ -44,7 +44,7 @@ function walk (tree, settings, callbacks) {
       const syntax = getSyntax(node.type)
       if (_isObject(syntax)) {
         callbacks.processNode(node, syntax)
-        if (syntax.newScope) {
+        if (_isFunction(syntax.newScope) ? syntax.newScope(node) : syntax.newScope) {
           callbacks.createScope(safeName(node.id, assignedName), node.loc, node.params.length)
         }
         if (syntax.methodName) {
