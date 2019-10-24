@@ -421,6 +421,13 @@ parsers.forEach(function (parserName, parser, options) {
         assert.strictEqual(expression.body.type, 'BlockStatement')
         assert.strictEqual(expression.expression, false)
       })
+      test('arrow function expression', function () {
+        this.walk('(a) => a')
+        var expression = this.callbacks.processNode.firstCall.args[0].expression
+        assert.strictEqual(expression.type, 'ArrowFunctionExpression')
+        assert.strictEqual(expression.body.type, 'Identifier')
+        assert.strictEqual(expression.expression, true)
+      })
       test('generator with yield expression', function () {
         this.walk('function* foo() { yield "bar" }')
         var declaration = this.callbacks.processNode.firstCall.args[0]
@@ -481,6 +488,7 @@ parsers.forEach(function (parserName, parser, options) {
         assert.strictEqual(pattern.properties[0].value.type, 'Identifier')
         assert.strictEqual(pattern.properties[0].kind, 'init')
         assert.strictEqual(pattern.properties[0].method, false)
+        assert.strictEqual(pattern.properties[0].shorthand, true)
       })
       test('array pattern', function () {
         this.walk('([foo]) => {}')
@@ -566,13 +574,13 @@ parsers.forEach(function (parserName, parser, options) {
           assert.strictEqual(baz.static, true)
         })
         test('super call', function () {
-          this.walk('class foo { constructor() { super() } }')
+          this.walk('class foo extends bar { constructor() { super() } }')
           var constructor = this.callbacks.processNode.firstCall.args[0].body.body[0]
           var callee = constructor.value.body.body[0].expression.callee
           assert.strictEqual(callee.type, 'Super')
         })
         test('super member', function () {
-          this.walk('class foo { constructor() { super.bar } }')
+          this.walk('class foo extends bar { constructor() { super.bar } }')
           var constructor = this.callbacks.processNode.firstCall.args[0].body.body[0]
           var member = constructor.value.body.body[0].expression
           assert.strictEqual(member.type, 'MemberExpression')
@@ -581,8 +589,8 @@ parsers.forEach(function (parserName, parser, options) {
           assert.strictEqual(member.property.name, 'bar')
         })
         test('meta property', function () {
-          this.walk('() => { new.target }')
-          var fn = this.callbacks.processNode.firstCall.args[0].expression
+          this.walk('function foo() { new.target }')
+          var fn = this.callbacks.processNode.firstCall.args[0]
           var expression = fn.body.body[0].expression
           assert.strictEqual(expression.type, 'MetaProperty')
           assert.strictEqual(expression.meta.type, 'Identifier')
@@ -706,7 +714,7 @@ parsers.forEach(function (parserName, parser, options) {
             ]
           ))
           test('export specifiers', testExample(
-            'export { member };',
+            'export { member }; const member = {};',
             [
               ['type', 'ExportNamedDeclaration'],
               ['declaration', null],
@@ -717,7 +725,7 @@ parsers.forEach(function (parserName, parser, options) {
             ]
           ))
           test('export specifier with alias', testExample(
-            'export { member as alias };',
+            'export { member as alias }; const member = {};',
             [
               ['type', 'ExportNamedDeclaration'],
               ['declaration', null],
@@ -753,6 +761,22 @@ parsers.forEach(function (parserName, parser, options) {
             ]
           ))
         })
+      })
+    })
+    suite('ES2017', function () {
+      test('async function with await expression', function () {
+        this.walk('async function foo() { await "bar" }')
+        var declaration = this.callbacks.processNode.firstCall.args[0]
+        var body = declaration.body
+        var statement = body.body[0]
+        var expression = statement.expression
+        assert.strictEqual(declaration.type, 'FunctionDeclaration')
+        assert.strictEqual(declaration.id.type, 'Identifier')
+        assert.strictEqual(declaration.id.name, 'foo')
+        assert.strictEqual(declaration.async, true)
+        assert.strictEqual(body.type, 'BlockStatement')
+        assert.strictEqual(statement.type, 'ExpressionStatement')
+        assert.strictEqual(expression.type, 'AwaitExpression')
       })
     })
   })

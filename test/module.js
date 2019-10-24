@@ -401,6 +401,204 @@ suite('module:', function () {
           assert.lengthOf(report.dependencies, 0)
         })
       })
+      suite('function call inside tagged template literal:', function () {
+        var report
+        setup(function () {
+          report = escomplex.analyse(parser.parse(`tag\`foo \${parseInt("10", 10)} bar\``, options), mozWalker)
+        })
+        teardown(function () {
+          report = undefined
+        })
+        test('aggregate has correct physical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.physical, 1)
+        })
+        test('aggregate has correct logical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.logical, 1)
+        })
+        test('aggregate has correct cyclomatic complexity', function () {
+          assert.strictEqual(report.aggregate.cyclomatic, 1)
+        })
+        test('aggregate has correct cyclomatic complexity density', function () {
+          assert.strictEqual(report.aggregate.cyclomaticDensity, 100)
+        })
+        test('aggregate has correct Halstead total operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.total, 3)
+        })
+        test('aggregate has correct Halstead distinct operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.distinct, 3)
+        })
+        test('aggregate has correct Halstead total operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.total, 3)
+        })
+        test('aggregate has correct Halstead distinct operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.distinct, 3)
+        })
+      })
+      suite('await function call:', function () {
+        var report
+        setup(function () {
+          report = escomplex.analyse(parser.parse('async function foo() { await parseInt("10", 10); }', options), mozWalker)
+        })
+        teardown(function () {
+          report = undefined
+        })
+        test('aggregate has correct physical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.physical, 1)
+        })
+        test('aggregate has correct logical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.logical, 2)
+        })
+        test('aggregate has correct cyclomatic complexity', function () {
+          assert.strictEqual(report.aggregate.cyclomatic, 1)
+        })
+        test('aggregate has correct cyclomatic complexity density', function () {
+          assert.strictEqual(report.aggregate.cyclomaticDensity, 50)
+        })
+        test('aggregate has correct Halstead total operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.total, 4)
+        })
+        test('aggregate has correct Halstead distinct operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.distinct, 4)
+        })
+        test('aggregate has correct Halstead total operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.total, 4)
+        })
+        test('aggregate has correct Halstead distinct operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.distinct, 4)
+        })
+      })
+      suite('yield function call:', function () {
+        var report
+        setup(function () {
+          report = escomplex.analyse(parser.parse('function *foo() { yield parseInt("10", 10); }', options), mozWalker)
+        })
+        teardown(function () {
+          report = undefined
+        })
+        test('aggregate has correct physical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.physical, 1)
+        })
+        test('aggregate has correct logical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.logical, 2)
+        })
+        test('aggregate has correct cyclomatic complexity', function () {
+          assert.strictEqual(report.aggregate.cyclomatic, 1)
+        })
+        test('aggregate has correct cyclomatic complexity density', function () {
+          assert.strictEqual(report.aggregate.cyclomaticDensity, 50)
+        })
+        test('aggregate has correct Halstead total operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.total, 4)
+        })
+        test('aggregate has correct Halstead distinct operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.distinct, 4)
+        })
+        test('aggregate has correct Halstead total operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.total, 4)
+        })
+        test('aggregate has correct Halstead distinct operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.distinct, 4)
+        })
+      })
+      suite('spread function call:', function () {
+        var report
+        setup(function () {
+          report = escomplex.analyse(parser.parse('[...parseInt("10", 10)]', options), mozWalker)
+        })
+        teardown(function () {
+          report = undefined
+        })
+        test('aggregate has correct physical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.physical, 1)
+        })
+        test('aggregate has correct logical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.logical, 1)
+        })
+        test('aggregate has correct cyclomatic complexity', function () {
+          assert.strictEqual(report.aggregate.cyclomatic, 1)
+        })
+        test('aggregate has correct cyclomatic complexity density', function () {
+          assert.strictEqual(report.aggregate.cyclomaticDensity, 100)
+        })
+        test('aggregate has correct Halstead total operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.total, 3)
+        })
+        test('aggregate has correct Halstead distinct operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.distinct, 3)
+        })
+        test('aggregate has correct Halstead total operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.total, 4)
+        })
+        test('aggregate has correct Halstead distinct operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.distinct, 4)
+        })
+      })
+      suite('array destructure and rest operator:', function () {
+        var report
+        setup(function () {
+          report = escomplex.analyse(parser.parse('const [a, ...b] = parseInt("10", 10)', options), mozWalker)
+        })
+        teardown(function () {
+          report = undefined
+        })
+        test('aggregate has correct physical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.physical, 1)
+        })
+        test('aggregate has correct logical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.logical, 1)
+        })
+        test('aggregate has correct cyclomatic complexity', function () {
+          assert.strictEqual(report.aggregate.cyclomatic, 1)
+        })
+        test('aggregate has correct cyclomatic complexity density', function () {
+          assert.strictEqual(report.aggregate.cyclomaticDensity, 100)
+        })
+        test('aggregate has correct Halstead total operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.total, 5)
+        })
+        test('aggregate has correct Halstead distinct operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.distinct, 5)
+        })
+        test('aggregate has correct Halstead total operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.total, 5)
+        })
+        test('aggregate has correct Halstead distinct operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.distinct, 5)
+        })
+      })
+      suite('object destructure:', function () {
+        var report
+        setup(function () {
+          report = escomplex.analyse(parser.parse('const { a } = b', options), mozWalker)
+        })
+        teardown(function () {
+          report = undefined
+        })
+        test('aggregate has correct physical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.physical, 1)
+        })
+        test('aggregate has correct logical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.logical, 1)
+        })
+        test('aggregate has correct cyclomatic complexity', function () {
+          assert.strictEqual(report.aggregate.cyclomatic, 1)
+        })
+        test('aggregate has correct cyclomatic complexity density', function () {
+          assert.strictEqual(report.aggregate.cyclomaticDensity, 100)
+        })
+        test('aggregate has correct Halstead total operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.total, 3)
+        })
+        test('aggregate has correct Halstead distinct operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.distinct, 3)
+        })
+        test('aggregate has correct Halstead total operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.total, 3)
+        })
+        test('aggregate has correct Halstead distinct operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.distinct, 2)
+        })
+      })
       suite('condition:', function () {
         var report
         setup(function () {
@@ -1469,6 +1667,63 @@ suite('module:', function () {
         })
         test('aggregate has correct Halstead distinct operands', function () {
           assert.strictEqual(report.aggregate.halstead.operands.distinct, 3)
+        })
+      })
+      suite('arrow function expression assigned to variable:', function () {
+        var report
+        setup(function () {
+          report = escomplex.analyse(parser.parse('var foo = () => "bar"', options), mozWalker)
+        })
+        teardown(function () {
+          report = undefined
+        })
+        test('aggregate has correct logical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.logical, 1)
+        })
+        test('functions has correct length', function () {
+          assert.lengthOf(report.functions, 0)
+        })
+        test('aggregate has correct Halstead total operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.total, 3)
+        })
+        test('aggregate has correct Halstead distinct operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.distinct, 3)
+        })
+        test('aggregate has correct Halstead total operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.total, 2)
+        })
+        test('aggregate has correct Halstead distinct operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.distinct, 2)
+        })
+      })
+      suite('arrow function block assigned to variable:', function () {
+        var report
+        setup(function () {
+          report = escomplex.analyse(parser.parse('var foo = () => { "bar"; }', options), mozWalker)
+        })
+        teardown(function () {
+          report = undefined
+        })
+        test('aggregate has correct logical lines of code', function () {
+          assert.strictEqual(report.aggregate.sloc.logical, 2)
+        })
+        test('functions has correct length', function () {
+          assert.lengthOf(report.functions, 1)
+        })
+        test('function has correct name', function () {
+          assert.strictEqual(report.functions[0].name, 'foo')
+        })
+        test('aggregate has correct Halstead total operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.total, 3)
+        })
+        test('aggregate has correct Halstead distinct operators', function () {
+          assert.strictEqual(report.aggregate.halstead.operators.distinct, 3)
+        })
+        test('aggregate has correct Halstead total operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.total, 2)
+        })
+        test('aggregate has correct Halstead distinct operands', function () {
+          assert.strictEqual(report.aggregate.halstead.operands.distinct, 2)
         })
       })
       suite('ternary condtional expression returned from function:', function () {
