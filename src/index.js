@@ -6,35 +6,50 @@ const _isNil = require('lodash.isnil')
 const espree = require('espree')
 const walker = require('./walker')
 const core = require('./core')
-const debug = require('debug')('escomplex')
 const defaultParserOptions = require('./config').parserOptions
 
 module.exports.analyse = (source, options, parsing) => {
-  var ast
-  var parser = defaultParser
-  const parserOptions = defaultParserOptions
-
-  if (typeof parsing === 'function') {
-    parser = parsing
-    debug('Custom parse function')
+  if (Array.isArray(source)) {
+    return analyseProject(source, options, parsing)
   }
-  if (typeof parsing === 'object') {
-    _assign(parserOptions, parsing)
-    debug('Custom parser options')
+  return analyseModule(source, options, parsing)
+}
+
+module.exports.analyseModule = analyseModule
+module.exports.analyseProject = analyseProject
+
+function analyseProject (source, options, parsing) {
+  const parser = getParser(parsing)
+  const parserOptions = getParserOptions(parsing)
+  const ast = parseProject(source, parser, parserOptions, options)
+  return core.analyse(ast, walker, options)
+}
+
+function analyseModule (source, options, parsing) {
+  const parser = getParser(parsing)
+  const parserOptions = getParserOptions(parsing)
+  const ast = parser(source, parserOptions)
+  return core.analyse(ast, walker, options)
+}
+
+function getParserOptions (options) {
+  const results = defaultParserOptions
+  if (typeof options === 'object') {
+    _assign(results, options)
   }
 
   // We must enable locations for the
   // Resulting AST, otherwise the metrics
   // Will be missing line information.
-  parserOptions.loc = true
-  if (Array.isArray(source)) {
-    ast = parseProject(source, parser, parserOptions, options)
-  } else {
-    ast = parser(source, parserOptions)
+  results.loc = true
+  return results
+}
+
+function getParser (customParser) {
+  if (typeof customParser === 'function') {
+    return customParser
   }
-  debug('Parsed AST: ')
-  debug(JSON.stringify(ast, null, 2))
-  return core.analyse(ast, walker, options)
+  return defaultParser
 }
 
 function defaultParser (source, parserOptions) {
