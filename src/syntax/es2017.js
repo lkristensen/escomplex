@@ -5,7 +5,7 @@ const safeName = require('../safeName')
 
 const AwaitExpression = settings => defineSyntax({
   operators: 'await',
-  children: [ 'argument' ]
+  children: ['argument']
 })
 
 // FunctionDeclaration redefined here with
@@ -18,7 +18,7 @@ const FunctionDeclaration = settings => defineSyntax({
     node => node.async ? 'async' : undefined
   ],
   operands: node => safeName(node.id),
-  children: [ 'params', 'body' ],
+  children: ['params', 'body'],
   newScope: true
 })
 

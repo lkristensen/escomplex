@@ -1,5 +1,5 @@
 'use strict'
-var parsers = [
+const parsers = [
   {
     name: 'acorn',
     options: {
@@ -33,10 +33,10 @@ var parsers = [
   }
 ]
 module.exports.forEach = function forEachParser (tests) {
-  for (var i = 0; i < parsers.length; i++) {
-    var parserName = parsers[i].name
-    var parser = parsers[i].parser
-    var options = parsers[i].options
+  for (let i = 0; i < parsers.length; i++) {
+    const parserName = parsers[i].name
+    const parser = parsers[i].parser
+    const options = parsers[i].options
     suite('using the ' + parserName + ' parser:', function () {
       tests(parserName, parser, options)
     })

@@ -20,7 +20,7 @@ suite('module:', function () {
     assert.isObject(require(modulePath))
   })
   suite('require:', function () {
-    var escomplex
+    let escomplex
     setup(function () {
       escomplex = require(modulePath)
     })
@@ -318,7 +318,7 @@ suite('module:', function () {
     })
     parsers.forEach(function (parserName, parser, options) {
       suite('function call:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('parseInt("10", 10);', options), mozWalker)
         })
@@ -402,9 +402,9 @@ suite('module:', function () {
         })
       })
       suite('function call inside tagged template literal:', function () {
-        var report
+        let report
         setup(function () {
-          report = escomplex.analyse(parser.parse(`tag\`foo \${parseInt("10", 10)} bar\``, options), mozWalker)
+          report = escomplex.analyse(parser.parse('tag`foo ${parseInt("10", 10)} bar`', options), mozWalker) // eslint-disable-line no-template-curly-in-string
         })
         teardown(function () {
           report = undefined
@@ -435,7 +435,7 @@ suite('module:', function () {
         })
       })
       suite('await function call:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('async function foo() { await parseInt("10", 10); }', options), mozWalker)
         })
@@ -468,7 +468,7 @@ suite('module:', function () {
         })
       })
       suite('yield function call:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function *foo() { yield parseInt("10", 10); }', options), mozWalker)
         })
@@ -501,7 +501,7 @@ suite('module:', function () {
         })
       })
       suite('spread function call:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('[...parseInt("10", 10)]', options), mozWalker)
         })
@@ -534,7 +534,7 @@ suite('module:', function () {
         })
       })
       suite('array destructure and rest operator:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('const [a, ...b] = parseInt("10", 10)', options), mozWalker)
         })
@@ -567,7 +567,7 @@ suite('module:', function () {
         })
       })
       suite('object destructure:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('const { a } = b', options), mozWalker)
         })
@@ -600,7 +600,7 @@ suite('module:', function () {
         })
       })
       suite('condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('if (true) { "foo"; }', options), mozWalker)
         })
@@ -681,7 +681,7 @@ suite('module:', function () {
         })
       })
       suite('condition with alternate:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('if (true) { "foo"; } else { "bar"; }', options), mozWalker)
         })
@@ -741,7 +741,7 @@ suite('module:', function () {
         })
       })
       suite('dual condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('if (true) { "foo"; } if (false) { "bar"; }', options), mozWalker)
         })
@@ -783,7 +783,7 @@ suite('module:', function () {
         })
       })
       suite('alternate dual condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('if (true) { "foo"; } else if (false) { "bar"; }', options), mozWalker)
         })
@@ -816,7 +816,7 @@ suite('module:', function () {
         })
       })
       suite('nested condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('if (true) { "foo"; if (false) { "bar"; } }', options), mozWalker)
         })
@@ -831,7 +831,7 @@ suite('module:', function () {
         })
       })
       suite('switch statement:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: "baz"; }', options), mozWalker)
         })
@@ -865,7 +865,7 @@ suite('module:', function () {
         })
       })
       suite('switch statement with fall-through case:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('switch (Date.now()) { case 1: case 2: "foo"; break; default: "bar"; }', options), mozWalker)
         })
@@ -895,7 +895,7 @@ suite('module:', function () {
         })
       })
       suite('switch statement containing condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: if (true) { "baz"; } }', options), mozWalker)
         })
@@ -925,7 +925,7 @@ suite('module:', function () {
         })
       })
       suite('for loop:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var i; for (i = 0; i < 10; i += 1) { "foo"; }', options), mozWalker)
         })
@@ -964,7 +964,7 @@ suite('module:', function () {
         })
       })
       suite('for loop containing condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var i; for (i = 0; i < 10; i += 1) { if (true) { "foo"; } }', options), mozWalker)
         })
@@ -988,7 +988,7 @@ suite('module:', function () {
         })
       })
       suite('for...in loop:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var property; for (property in { foo: "bar", baz: "qux" }) { "wibble"; }', options), mozWalker)
         })
@@ -1027,7 +1027,7 @@ suite('module:', function () {
         })
       })
       suite('for...in loop containing condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var property, object = { foo: "bar", baz: "qux" }; for (property in object) { if (object.hasOwnProperty(property)) { "wibble"; } }', options), mozWalker)
         })
@@ -1051,7 +1051,7 @@ suite('module:', function () {
         })
       })
       suite('for...of loop:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var item; for (item of [ "foo", "bar", "baz" ]) { "wibble"; }', options), mozWalker)
         })
@@ -1090,7 +1090,7 @@ suite('module:', function () {
         })
       })
       suite('while loop:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('while (true) { "foo"; }', options), mozWalker)
         })
@@ -1120,7 +1120,7 @@ suite('module:', function () {
         })
       })
       suite('while loop containing condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('while (true) { if (true) { "foo"; } }', options), mozWalker)
         })
@@ -1144,7 +1144,7 @@ suite('module:', function () {
         })
       })
       suite('do...while loop:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('do { "foo"; } while (true)', options), mozWalker)
         })
@@ -1174,7 +1174,7 @@ suite('module:', function () {
         })
       })
       suite('do...while loop containing condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('do { if (true) { "foo"; } } while (true)', options), mozWalker)
         })
@@ -1198,9 +1198,9 @@ suite('module:', function () {
         })
       })
       suite('try...catch:', function () {
-        var report
+        let report
         setup(function () {
-          var ast = parser.parse('try { "foo"; } catch (e) { e.message; }', options)
+          const ast = parser.parse('try { "foo"; } catch (e) { e.message; }', options)
           report = escomplex.analyse(ast, mozWalker)
         })
         teardown(function () {
@@ -1229,7 +1229,7 @@ suite('module:', function () {
         })
       })
       suite('try containing condition', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('try { if (true) { "foo"; } } catch (e) { "bar"; }', options), mozWalker)
         })
@@ -1253,7 +1253,7 @@ suite('module:', function () {
         })
       })
       suite('catch containing condition', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('try { "foo"; } catch (e) { if (true) { "bar"; } }', options), mozWalker)
         })
@@ -1277,7 +1277,7 @@ suite('module:', function () {
         })
       })
       suite('function declaration:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { "bar"; }', options), mozWalker)
         })
@@ -1358,7 +1358,7 @@ suite('module:', function () {
         })
       })
       suite('nested function declaration:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { bar(); function bar () { "baz"; } }', options), mozWalker)
         })
@@ -1397,7 +1397,7 @@ suite('module:', function () {
         })
       })
       suite('function declaration containing condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { if (true) { "bar"; } }', options), mozWalker)
         })
@@ -1427,7 +1427,7 @@ suite('module:', function () {
         })
       })
       suite('class declaration', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('class foo { constructor () { "foo"; } }', options), mozWalker)
         })
@@ -1508,7 +1508,7 @@ suite('module:', function () {
         })
       })
       suite('assignment expression', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = "bar";', options), mozWalker)
         })
@@ -1538,7 +1538,7 @@ suite('module:', function () {
         })
       })
       suite('ternary condtional expression assigned to variable:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = true ? "bar" : "baz";', options), mozWalker)
         })
@@ -1565,7 +1565,7 @@ suite('module:', function () {
         })
       })
       suite('nested ternary condtional expression:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = true ? "bar" : (false ? "baz" : "qux");', options), mozWalker)
         })
@@ -1592,7 +1592,7 @@ suite('module:', function () {
         })
       })
       suite('logical or expression assigned to variable:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = true || false;', options), mozWalker)
         })
@@ -1619,7 +1619,7 @@ suite('module:', function () {
         })
       })
       suite('anonymous function assigned to variable:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = function () { "bar"; }', options), mozWalker)
         })
@@ -1649,7 +1649,7 @@ suite('module:', function () {
         })
       })
       suite('named function assigned to variable:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = function bar () { "baz"; }', options), mozWalker)
         })
@@ -1670,7 +1670,7 @@ suite('module:', function () {
         })
       })
       suite('arrow function expression assigned to variable:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = () => "bar"', options), mozWalker)
         })
@@ -1697,7 +1697,7 @@ suite('module:', function () {
         })
       })
       suite('arrow function block assigned to variable:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = () => { "bar"; }', options), mozWalker)
         })
@@ -1727,7 +1727,7 @@ suite('module:', function () {
         })
       })
       suite('ternary condtional expression returned from function:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { return true ? "bar" : "baz"; }', options), mozWalker)
         })
@@ -1757,7 +1757,7 @@ suite('module:', function () {
         })
       })
       suite('logical or expression returned from function:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { return true || false; }', options), mozWalker)
         })
@@ -1781,7 +1781,7 @@ suite('module:', function () {
         })
       })
       suite('anonymous function returned from function:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { return function () { "bar"; }; }', options), mozWalker)
         })
@@ -1814,7 +1814,7 @@ suite('module:', function () {
         })
       })
       suite('named function returned from function:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { return function bar () { "baz"; }; }', options), mozWalker)
         })
@@ -1832,7 +1832,7 @@ suite('module:', function () {
         })
       })
       suite('ternary condtional expression passed as argument:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('parseInt("10", true ? 10 : 8);', options), mozWalker)
         })
@@ -1856,7 +1856,7 @@ suite('module:', function () {
         })
       })
       suite('logical or expression passed as argument:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('parseInt("10", 10 || 8);', options), mozWalker)
         })
@@ -1868,7 +1868,7 @@ suite('module:', function () {
         })
       })
       suite('anonymous function passed as argument:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('setTimeout(function () { "foo"; }, 1000);', options), mozWalker)
         })
@@ -1898,7 +1898,7 @@ suite('module:', function () {
         })
       })
       suite('named function passed as argument:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('setTimeout(function foo () { "bar"; }, 1000);', options), mozWalker)
         })
@@ -1911,12 +1911,12 @@ suite('module:', function () {
       })
       suite('logical AND expression:', function () {
         test('aggregate has correct cyclomatic complexity', function () {
-          var report = escomplex.analyse(parser.parse('var foo = true && false;'), mozWalker, {})
+          const report = escomplex.analyse(parser.parse('var foo = true && false;'), mozWalker, {})
           assert.strictEqual(report.cyclomatic, 2)
         })
       })
       suite('logical OR expression with logicalor false:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = true || false;', options), mozWalker, {
             logicalor: false
@@ -1930,7 +1930,7 @@ suite('module:', function () {
         })
       })
       suite('switch statement with switchcase false:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('switch (Date.now()) { case 1: "foo"; break; case 2: "bar"; break; default: "baz"; }', options), mozWalker, {
             switchcase: false
@@ -1944,7 +1944,7 @@ suite('module:', function () {
         })
       })
       suite('for...in loop with forin true:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var property; for (property in { foo: "bar", baz: "qux" }) { "wibble"; }', options), mozWalker, {
             forin: true
@@ -1958,7 +1958,7 @@ suite('module:', function () {
         })
       })
       suite('try...catch with trycatch true:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('try { "foo"; } catch (e) { e.message; }', options), mozWalker, {
             trycatch: true
@@ -1972,7 +1972,7 @@ suite('module:', function () {
         })
       })
       suite('IIFE:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('(function (foo) { if (foo === "foo") { console.log(foo); return; } "bar"; }("foo"));', options), mozWalker)
         })
@@ -2011,7 +2011,7 @@ suite('module:', function () {
         })
       })
       suite('logical and condition:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('if ("foo" && "bar") { "baz"; }', options), mozWalker)
         })
@@ -2038,7 +2038,7 @@ suite('module:', function () {
         })
       })
       suite('call on function object:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('(function () { "foo"; }).call(this);', options), mozWalker)
         })
@@ -2065,7 +2065,7 @@ suite('module:', function () {
         })
       })
       suite('anonymous function assigned to property:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = {}; foo.bar = function () { "foobar"; };', options), mozWalker)
         })
@@ -2095,7 +2095,7 @@ suite('module:', function () {
         })
       })
       suite('anonymous function assigned to property of literal:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('"".bar = function () { "bar"; };', options), mozWalker)
         })
@@ -2113,7 +2113,7 @@ suite('module:', function () {
         })
       })
       suite('empty object literal:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = {};', options), mozWalker)
         })
@@ -2143,7 +2143,7 @@ suite('module:', function () {
         })
       })
       suite('function property of literal object:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = { bar: "bar", baz: function () { "baz"; } };', options), mozWalker)
         })
@@ -2173,7 +2173,7 @@ suite('module:', function () {
         })
       })
       suite('duplicate function properties of literal object:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = { bar: function () { if (true) { "bar"; } }, bar: function () { "bar"; } };', options), mozWalker)
         })
@@ -2200,7 +2200,7 @@ suite('module:', function () {
         })
       })
       suite('throw exception:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('try { throw new Error("foo"); } catch (e) { alert(error.message); }', options), mozWalker)
         })
@@ -2227,7 +2227,7 @@ suite('module:', function () {
         })
       })
       suite('prefix and postfix increment:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var a = 0; ++a; a++;', options), mozWalker)
         })
@@ -2257,7 +2257,7 @@ suite('module:', function () {
         })
       })
       suite('array literal:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('[ "foo", "bar" ];', options), mozWalker)
         })
@@ -2287,7 +2287,7 @@ suite('module:', function () {
         })
       })
       suite('multiple physical lines:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('// This is a\n// multi-line\n// comment.\nparseInt(\n\t(function () {\n\t\t// Moar\n\t\t// commentz!\n\t\treturn [\n\t\t\t"1",\n\t\t\t"0"\n\t\t].join("");\n\t}()),\n\t10\n);', options), mozWalker)
         })
@@ -2321,7 +2321,7 @@ suite('module:', function () {
         })
       })
       suite('multiple functions:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', options), mozWalker)
         })
@@ -2354,7 +2354,7 @@ suite('module:', function () {
         })
       })
       suite('issue 3 / reddit.ISV_Damocles:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var callback = arguments[arguments.length-1] instanceof Function ? arguments[arguments.length-1] : function() {};', options), mozWalker)
         })
@@ -2366,7 +2366,7 @@ suite('module:', function () {
         })
       })
       suite('empty return:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { return; }', options), mozWalker)
         })
@@ -2396,7 +2396,7 @@ suite('module:', function () {
         })
       })
       suite('Empty nested functions', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo () { function bar () {} }', options), mozWalker)
         })
@@ -2408,7 +2408,7 @@ suite('module:', function () {
         })
       })
       suite('Microsoft variant maintainability index:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', options), mozWalker, {
             newmi: true
@@ -2422,7 +2422,7 @@ suite('module:', function () {
         })
       })
       suite('Functions with consistent parameter counts:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo (a) {} function bar (b) {} function baz (c) {}', options), mozWalker)
         })
@@ -2437,7 +2437,7 @@ suite('module:', function () {
         })
       })
       suite('Functions with inconsistent parameter counts:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('function foo (a, b, c, d, e) {} function bar (a, b, c, d, e) {} function baz (a) {}', options), mozWalker)
         })
@@ -2452,7 +2452,7 @@ suite('module:', function () {
         })
       })
       suite('CommonJS require literal:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('require("./foo");', options), mozWalker)
         })
@@ -2470,7 +2470,7 @@ suite('module:', function () {
         })
       })
       suite('alternative CommonJS require literal:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('require("./bar");', options), mozWalker)
         })
@@ -2482,7 +2482,7 @@ suite('module:', function () {
         })
       })
       suite('CommonJS require multiple:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('require("./foo");\nrequire("./bar");\n\nrequire("./baz");', options), mozWalker)
         })
@@ -2502,7 +2502,7 @@ suite('module:', function () {
         })
       })
       suite('CommonJS require variable:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = "./foo";require(foo);', options), mozWalker)
         })
@@ -2520,12 +2520,12 @@ suite('module:', function () {
         })
       })
       suite('ES2015 module import:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(
             parser.parse(
               'import foo from "./foo";',
-              _merge({}, options, {sourceType: 'module'})
+              _merge({}, options, { sourceType: 'module' })
             ),
             mozWalker
           )
@@ -2544,12 +2544,12 @@ suite('module:', function () {
         })
       })
       suite('ES2015 module import and AMD require:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(
             parser.parse(
               'import foo from "./foo"; require([ "./bar" ], function (bar) {});',
-              _merge({}, options, {sourceType: 'module'})
+              _merge({}, options, { sourceType: 'module' })
             ),
             mozWalker
           )
@@ -2575,7 +2575,7 @@ suite('module:', function () {
         })
       })
       suite('AMD require literal:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('require([ "foo" ], function (foo) {});', options), mozWalker)
         })
@@ -2593,7 +2593,7 @@ suite('module:', function () {
         })
       })
       suite('alternative AMD require literal:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('require([ "bar" ], function (barModule) {});', options), mozWalker)
         })
@@ -2605,7 +2605,7 @@ suite('module:', function () {
         })
       })
       suite('AMD require multiple:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('require([ "foo", "bar", "baz" ], function (foo, bar, baz) {});', options), mozWalker)
         })
@@ -2626,7 +2626,7 @@ suite('module:', function () {
         })
       })
       suite('AMD require variable:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = "foo";\nrequire([ foo ], function (foo) {});', options), mozWalker)
         })
@@ -2643,7 +2643,7 @@ suite('module:', function () {
         })
       })
       suite('AMD require variable array:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('var foo = [ "foo" ];\nrequire(foo, function (foo) {});', options), mozWalker)
         })
@@ -2659,7 +2659,7 @@ suite('module:', function () {
         })
       })
       suite('AMD require.config:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('require.config({\n\tpaths: {\n\t\tfoo: "path/to/foo",\n\t\tbaz: "../wibble"\n\t}\n});\nrequire([ "foo", "bar", "baz" ], function (foo, bar, baz) {});', options), mozWalker)
         })
@@ -2682,7 +2682,7 @@ suite('module:', function () {
         })
       })
       suite('AMD require literal string:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('require("foo", function (foo) {});', options), mozWalker)
         })
@@ -2699,7 +2699,7 @@ suite('module:', function () {
         })
       })
       suite('Missing loc data:', function () {
-        var report
+        let report
         setup(function () {
           report = escomplex.analyse(parser.parse('parseInt("10", 10);'), mozWalker)
         })

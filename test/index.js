@@ -1,12 +1,8 @@
 'use strict'
-var assert
-var mockery
-var spooks
-var modulePath
-assert = require('chai').assert
-mockery = require('mockery')
-spooks = require('spooks')
-modulePath = '../src'
+const assert = require('chai').assert
+const mockery = require('mockery')
+const spooks = require('spooks')
+const modulePath = '../src'
 mockery.registerAllowable(modulePath)
 mockery.registerAllowable('lodash.assign')
 mockery.registerAllowable('lodash.negate')
@@ -23,8 +19,8 @@ mockery.registerAllowable('tty')
 mockery.registerAllowable('ms')
 mockery.registerAllowable('util')
 suite('index:', function () {
-  var log
-  var walker
+  let log
+  let walker
   setup(function () {
     log = {}
     walker = {}
@@ -69,7 +65,7 @@ suite('index:', function () {
     assert.isObject(require(modulePath))
   })
   suite('require:', function () {
-    var index
+    let index
     setup(function () {
       index = require(modulePath)
     })
@@ -91,8 +87,8 @@ suite('index:', function () {
       assert.strictEqual(log.counts['core.analyse'], 0)
     })
     suite('array source:', function () {
-      var options
-      var result
+      let options
+      let result
       setup(function () {
         options = {}
         result = index.analyse([
@@ -165,7 +161,7 @@ suite('index:', function () {
       })
     })
     suite('array source with bad code:', function () {
-      var code
+      let code
       setup(function () {
         mockery.deregisterMock('espree')
         mockery.disable()
@@ -198,8 +194,8 @@ suite('index:', function () {
       })
     })
     suite('string source:', function () {
-      var options
-      var result
+      let options
+      let result
       setup(function () {
         options = {}
         result = index.analyse('foo bar baz', options)

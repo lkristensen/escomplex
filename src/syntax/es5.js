@@ -12,7 +12,7 @@ const ArrayExpression = settings => defineSyntax({
 
 const AssignmentExpression = settings => defineSyntax({
   operators: node => node.operator,
-  children: [ 'left', 'right' ],
+  children: ['left', 'right'],
   assignableName: node => {
     if (node.left.type === 'MemberExpression') {
       return safeName(node.left.object) +
@@ -25,7 +25,7 @@ const AssignmentExpression = settings => defineSyntax({
 
 const BinaryExpression = settings => defineSyntax({
   operators: node => node.operator,
-  children: [ 'left', 'right' ]
+  children: ['left', 'right']
 })
 
 const BlockStatement = settings => defineSyntax({
@@ -35,7 +35,7 @@ const BlockStatement = settings => defineSyntax({
 const BreakStatement = settings => defineSyntax({
   lloc: 1,
   operators: 'break',
-  children: [ 'label' ]
+  children: ['label']
 })
 
 let amdPathAliases = {}
@@ -48,9 +48,9 @@ function dependencyPath (item, fallback) {
 }
 
 function processRequire (node) {
-  let line = node.loc.start.line
-  let path = '* dynamic dependency *'
-  let args = node.arguments
+  const line = node.loc.start.line
+  const path = '* dynamic dependency *'
+  const args = node.arguments
 
   if (args.length === 1) {
     return {
@@ -61,7 +61,7 @@ function processRequire (node) {
   }
 
   if (args.length === 2) {
-    let type = 'AMD'
+    const type = 'AMD'
 
     if (args[0].type === 'ArrayExpression') {
       return args[0].elements.map(
@@ -84,7 +84,7 @@ function processRequire (node) {
 const CallExpression = settings => defineSyntax({
   lloc: node => node.callee.type === 'FunctionExpression' ? 1 : 0,
   operators: '()',
-  children: [ 'arguments', 'callee' ],
+  children: ['arguments', 'callee'],
   dependencies: (node, clearAliases) => {
     if (clearAliases) {
       // TODO: This prohibits async running. Refine by passing in module id as key for amdPathAliases.
@@ -102,7 +102,7 @@ const CallExpression = settings => defineSyntax({
       node.callee.property.type === 'Identifier' &&
       node.callee.property.name === 'config'
     ) {
-      let args = node.arguments
+      const args = node.arguments
       if (args.length === 1 && args[0].type === 'ObjectExpression') {
         args[0].properties.forEach(property => {
           if (
@@ -129,7 +129,7 @@ const CatchClause = settings => defineSyntax({
   lloc: 1,
   cyclomatic: settings.trycatch ? 1 : 0,
   operators: 'catch',
-  children: [ 'param', 'body' ]
+  children: ['param', 'body']
 })
 
 const ConditionalExpression = settings => defineSyntax({
@@ -145,7 +145,7 @@ const ConditionalExpression = settings => defineSyntax({
 const ContinueStatement = settings => defineSyntax({
   lloc: 1,
   operators: 'continue',
-  children: [ 'label' ]
+  children: ['label']
 })
 
 const DebuggerStatement = settings => defineSyntax({})
@@ -164,7 +164,7 @@ const EmptyStatement = settings => defineSyntax({})
 
 const ExpressionStatement = settings => defineSyntax({
   lloc: 1,
-  children: [ 'expression' ]
+  children: ['expression']
 })
 
 const ForInStatement = settings => defineSyntax({
@@ -194,14 +194,14 @@ const FunctionDeclaration = settings => defineSyntax({
   lloc: 1,
   operators: 'function',
   operands: node => safeName(node.id),
-  children: [ 'params', 'body' ],
+  children: ['params', 'body'],
   newScope: true
 })
 
 const FunctionExpression = settings => defineSyntax({
   operators: 'function',
-  operands: node => safeName({name: node.id}),
-  children: [ 'params', 'body' ],
+  operands: node => safeName({ name: node.id }),
+  children: ['params', 'body'],
   newScope: true
 })
 
@@ -239,17 +239,17 @@ const Literal = settings => defineSyntax({
 
 const LogicalExpression = settings => defineSyntax({
   cyclomatic: node => {
-    var isAnd = node.operator === '&&'
-    var isOr = node.operator === '||'
+    const isAnd = node.operator === '&&'
+    const isOr = node.operator === '||'
     return (isAnd || (settings.logicalor && isOr)) ? 1 : 0
   },
   operators: node => node.operator,
-  children: [ 'left', 'right' ]
+  children: ['left', 'right']
 })
 
 const MemberExpression = settings => defineSyntax({
   lloc: node => {
-    let type = node.object.type
+    const type = node.object.type
     if (
       type === 'ObjectExpression' ||
       type === 'ArrayExpression' ||
@@ -260,13 +260,13 @@ const MemberExpression = settings => defineSyntax({
     return 0
   },
   operators: '.',
-  children: [ 'object', 'property' ]
+  children: ['object', 'property']
 })
 
 const NewExpression = settings => defineSyntax({
   lloc: node => node.callee.type === 'FunctionExpression' ? 1 : 0,
   operators: 'new',
-  children: [ 'arguments', 'callee' ]
+  children: ['arguments', 'callee']
 })
 
 const ObjectExpression = settings => defineSyntax({
@@ -278,7 +278,7 @@ const ObjectExpression = settings => defineSyntax({
 const Property = settings => defineSyntax({
   lloc: 1,
   operators: ':',
-  children: [ 'key', 'value' ],
+  children: ['key', 'value'],
   assignableName: node => safeName(node.key)
 })
 
@@ -347,7 +347,7 @@ const VariableDeclarator = settings => defineSyntax({
     filter: node => !!node.init,
     identifier: '='
   },
-  children: [ 'id', 'init' ],
+  children: ['id', 'init'],
   assignableName: node => safeName(node.id)
 })
 

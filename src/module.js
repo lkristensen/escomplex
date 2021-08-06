@@ -16,20 +16,19 @@ const defaultSettings = {
 
 module.exports.analyse = analyse
 
-var report
+let report
 
 function analyse (ast, walker, options) {
   // TODO: Asynchronise
-  var settings
-  var currentReport
-  var clearDependencies = true
+  let currentReport
+  let clearDependencies = true
   const scopeStack = []
 
   assert(_isObject(ast), 'Invalid syntax tree')
   assert(_isObject(walker), 'Invalid walker')
   assert(_isFunction(walker.walk), 'Invalid walker.walk method')
 
-  settings = _isObject(options) ? options : defaultSettings
+  const settings = _isObject(options) ? options : defaultSettings
 
   // TODO: loc is moz-specific, move to walker?
   report = createReport(ast.loc)
@@ -139,7 +138,7 @@ function incrementCyclomatic (currentReport, amount) {
 function processHalsteadMetric (node, syntax, metric, currentReport) {
   if (Array.isArray(syntax[metric])) {
     syntax[metric].forEach(s => {
-      var identifier
+      let identifier
       if (_isFunction(s.identifier)) {
         identifier = s.identifier(node)
       } else {
@@ -169,7 +168,7 @@ function incrementDistinctHalsteadItems (baseReport, metric, identifier) {
   const identifiers = baseReport.halstead[metric].identifiers
 
   // Avoid clashes with built-in property names.
-  if (Object.prototype.hasOwnProperty(identifier)) {
+  if (Object.prototype.hasOwnProperty(identifier)) { // eslint-disable-line no-prototype-builtins
     identifier = `_${identifier}`
   }
   if (identifiers.indexOf(identifier) === -1) {
@@ -180,7 +179,7 @@ function incrementDistinctHalsteadItems (baseReport, metric, identifier) {
 }
 
 function processDependencies (node, syntax, clearDependencies) {
-  var dependencies
+  let dependencies
   if (_isFunction(syntax.dependencies)) {
     dependencies = syntax.dependencies(node, clearDependencies)
     if (_isObject(dependencies) || Array.isArray(dependencies)) {
@@ -192,18 +191,15 @@ function processDependencies (node, syntax, clearDependencies) {
 }
 
 function calculateMetrics (settings) {
-  var count
-  var indices
-  var sums
-  var averages
+  let count
   count = report.functions.length
-  indices = {
+  const indices = {
     cyclomatic: 1,
     effort: 2,
     loc: 0,
     params: 3
   }
-  sums = [
+  const sums = [
     0,
     0,
     0,
@@ -221,7 +217,7 @@ function calculateMetrics (settings) {
     sumMaintainabilityMetrics(sums, indices, report.aggregate)
     count = 1
   }
-  averages = sums.map(sum => sum / count)
+  const averages = sums.map(sum => sum / count)
   report.maintainability = calculateMaintainabilityIndex(
     averages[indices.effort],
     averages[indices.cyclomatic],
@@ -248,7 +244,7 @@ function calculateMaintainabilityIndex (averageEffort, averageCyclomatic, averag
   if (averageCyclomatic === 0) {
     throw new Error('Encountered function with cyclomatic complexity zero!')
   }
-  var maintainability = 171 - (3.42 * Math.log(averageEffort)) - (0.23 * Math.log(averageCyclomatic)) - (16.2 * Math.log(averageLoc))
+  let maintainability = 171 - (3.42 * Math.log(averageEffort)) - (0.23 * Math.log(averageCyclomatic)) - (16.2 * Math.log(averageLoc))
   if (maintainability > 171) {
     maintainability = 171
   }

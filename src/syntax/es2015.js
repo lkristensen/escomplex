@@ -7,24 +7,24 @@ const ForOfStatement = settings => defineSyntax({
   lloc: 1,
   cyclomatic: settings.forof ? 1 : 0,
   operators: 'forof',
-  children: [ 'left', 'right', 'body' ]
+  children: ['left', 'right', 'body']
 })
 
 const ClassBody = settings => defineSyntax({
-  children: [ 'body' ]
+  children: ['body']
 })
 
 const ClassDeclaration = settings => defineSyntax({
   lloc: 1,
   operators: 'class',
   operands: node => node.id.name,
-  children: [ 'superClass', 'body' ]
+  children: ['superClass', 'body']
 })
 
 const ImportDeclaration = settings => defineSyntax({
   lloc: 1,
   operators: 'import',
-  children: [ 'specifiers', 'source' ],
+  children: ['specifiers', 'source'],
   dependencies: node => ({
     line: node.loc.start.line,
     type: 'Module',
@@ -35,53 +35,53 @@ const ImportDeclaration = settings => defineSyntax({
 const ExportAllDeclaration = settings => defineSyntax({
   lloc: 1,
   operators: 'export',
-  children: [ 'source' ]
+  children: ['source']
 })
 
 const ExportDefaultDeclaration = settings => defineSyntax({
   lloc: 1,
   operators: 'export',
-  children: [ 'declaration' ]
+  children: ['declaration']
 })
 
 const ExportNamedDeclaration = settings => defineSyntax({
   lloc: 1,
   operators: 'export',
-  children: [ 'declaration', 'specifiers', 'source' ]
+  children: ['declaration', 'specifiers', 'source']
 })
 
 const MethodDefinition = settings => defineSyntax({
   operators: node => node.static ? 'static' : undefined,
-  children: [ 'value' ],
+  children: ['value'],
   methodName: node => node.key
 })
 
 // Arrows with a block statement body are treated as new scope
 const ArrowFunctionExpression = settings => defineSyntax({
   operators: '=>',
-  children: [ 'params', 'body' ],
+  children: ['params', 'body'],
   newScope: node => !node.expression
 })
 
 const YieldExpression = settings => defineSyntax({
   operators: 'yield',
-  children: [ 'argument' ]
+  children: ['argument']
 })
 
 const RestElement = settings => defineSyntax({
   operators: 'rest',
-  children: [ 'argument' ]
+  children: ['argument']
 })
 
 const SpreadElement = settings => defineSyntax({
   operators: 'spread',
-  children: [ 'argument' ]
+  children: ['argument']
 })
 
 // Default Parameters
 const AssignmentPattern = settings => defineSyntax({
   operators: '=',
-  children: [ 'left', 'right' ],
+  children: ['left', 'right'],
   assignableName: node => safeName(node.left.id)
 })
 
@@ -115,7 +115,7 @@ const Property = settings => defineSyntax({
   // Note that when shorthand is true, key and value will be
   // the same, so total operands will be 1 higher than it ideally should be
   // No easy fix.
-  children: [ 'key', 'value' ],
+  children: ['key', 'value'],
   assignableName: node => safeName(node.key)
 })
 

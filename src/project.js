@@ -14,7 +14,7 @@ function analyse (modules, walker, options) {
   assert(Array.isArray(modules), 'Invalid modules')
 
   const reports = modules.map(m => {
-    var report
+    let report
     assert(_isString(m.path) && m.path.length > 0, 'Invalid path')
     try {
       report = moduleAnalyser.analyse(m.ast, walker, options)
@@ -27,9 +27,9 @@ function analyse (modules, walker, options) {
     }
   }, [])
   if (options.skipCalculation) {
-    return {reports}
+    return { reports }
   }
-  return processResults({reports}, options.noCoreSize)
+  return processResults({ reports }, options.noCoreSize)
 }
 
 function processResults (result, noCoreSize) {
@@ -132,7 +132,7 @@ function isDependency (from, dependency, to) {
 // Implementation of floydWarshall alg for calculating visibility matrix in O(n^3) instead of O(n^4) with successive raising of powers
 
 function createVisibilityMatrix (result) {
-  var changeCost = 0
+  let changeCost = 0
   const distMatrix = adjacencyToDistMatrix(result.adjacencyMatrix)
   const matrixLen = distMatrix.length
   for (let k = 0; k < matrixLen; k += 1) {
@@ -232,7 +232,7 @@ function compareNumbers (lhs, rhs) {
 }
 
 function calculateAverages (result) {
-  var divisor
+  let divisor
   const sums = {
     cyclomatic: 0,
     effort: 0,

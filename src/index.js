@@ -71,5 +71,5 @@ function parseProject (sources, parser, parserOptions, options) {
       throw error
     }
   })
-  .filter(_negate(_isNil))
+    .filter(_negate(_isNil))
 }

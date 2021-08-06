@@ -1,9 +1,9 @@
 /* globals require, suite, test, setup, teardown */
 'use strict'
-var assert = require('chai').assert
-var mozWalker = require('../src/walker')
-var parsers = require('./helpers/parsers')
-var modulePath = '../src/project'
+const assert = require('chai').assert
+const mozWalker = require('../src/walker')
+const parsers = require('./helpers/parsers')
+const modulePath = '../src/project'
 suite('project:', function () {
   test('require does not throw', function () {
     assert.doesNotThrow(function () {
@@ -14,7 +14,7 @@ suite('project:', function () {
     assert.isObject(require(modulePath))
   })
   suite('require:', function () {
-    var cr
+    let cr
     setup(function () {
       cr = require(modulePath)
     })
@@ -48,7 +48,7 @@ suite('project:', function () {
       })
     })
     suite('no modules:', function () {
-      var result
+      let result
       setup(function () {
         result = cr.analyse([], mozWalker)
       })
@@ -97,7 +97,7 @@ suite('project:', function () {
     })
     parsers.forEach(function (parserName, parser, options) {
       suite('two modules:', function () {
-        var result
+        let result
         setup(function () {
           result = cr.analyse([
             {
@@ -217,8 +217,8 @@ suite('project:', function () {
         })
       })
       suite('two modules with different options:', function () {
-        var modules = []
-        var reportsOnly
+        const modules = []
+        let reportsOnly
         setup(function () {
           modules.push({
             ast: parser.parse('function foo (a, b) { if (a) { b(a); } else { a(b); } } function bar (c, d) { var i; for (i = 0; i < c.length; i += 1) { d += 1; } console.log(d); }', options),
@@ -238,7 +238,7 @@ suite('project:', function () {
           ])
         })
         test('should not have coreSize or visibilityMatrix if we call with noCoreSize', function () {
-          var results = cr.analyse(modules, mozWalker, {
+          const results = cr.analyse(modules, mozWalker, {
             noCoreSize: true
           })
           assert.notOk(results.coreSize)
@@ -249,14 +249,12 @@ suite('project:', function () {
           assert.ok(results.loc)
         })
         test('should be able to run processResults', function () {
-          var fullReport
-          var calcReport
-          fullReport = cr.analyse(modules, mozWalker)
-          calcReport = cr.processResults(reportsOnly)
+          const fullReport = cr.analyse(modules, mozWalker)
+          const calcReport = cr.processResults(reportsOnly)
           assert.deepEqual(calcReport, fullReport)
         })
         test('should be able to run processResults without calculating coreSize', function () {
-          var results = cr.processResults(reportsOnly, true)
+          const results = cr.processResults(reportsOnly, true)
           assert.notOk(results.coreSize)
           assert.notOk(results.visibilityMatrix)
 
@@ -270,7 +268,7 @@ suite('project:', function () {
           this.path1 = '/b.js'
           this.path2 = '/mod/index.js'
           this.path3 = '/mod/a.js'
-          var result = cr.analyse([
+          const result = cr.analyse([
             {
               ast: parser.parse('require("./mod")', options),
               path: this.path1
@@ -318,7 +316,7 @@ suite('project:', function () {
         })
       })
       suite('modules with dependencies:', function () {
-        var result
+        let result
         setup(function () {
           result = cr.analyse([
             {
@@ -382,7 +380,7 @@ suite('project:', function () {
         })
       })
       suite('MacCormack, Rusnak & Baldwin example:', function () {
-        var result
+        let result
         setup(function () {
           result = cr.analyse([
             {
